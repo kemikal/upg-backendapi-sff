@@ -23,7 +23,7 @@ namespace sff_api
         }
 
         // CORS
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        // readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         public IConfiguration Configuration { get; }
 
@@ -35,11 +35,11 @@ namespace sff_api
             services.AddDbContext<RentedFilmContext>(opt => opt.UseInMemoryDatabase("sff_api"));
             services.AddDbContext<FilmTriviaContext>(opt => opt.UseInMemoryDatabase("sff_api"));
 
-            services.AddCors(options => {
-                options.AddPolicy(MyAllowSpecificOrigins, builder => {
-                    builder.WithOrigins("http://127.0.0.1:5500");
-                });
-            });
+            //services.AddCors(options => {
+            //    options.AddPolicy(MyAllowSpecificOrigins, builder => {
+            //        builder.WithOrigins("http://127.0.0.1:5500");
+            //    });
+            //});
 
             services.AddControllers();
         }
@@ -52,7 +52,16 @@ namespace sff_api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(MyAllowSpecificOrigins);
+            // app.UseCors(MyAllowSpecificOrigins);
+
+            app.UseCors(builder =>
+                builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .WithOrigins("http://127.0.0.1:5500")
+            );
 
             app.UseHttpsRedirection();
 
